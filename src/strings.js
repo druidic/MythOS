@@ -5,8 +5,10 @@ function prefix(pre) {
 }
 
 function center(width) {
+  SPACES = "                                "
   // TODO test
   return function(s) {
-    return s
+    if (width < s.length) return s
+    return SPACES.slice(0, (width - s.length) / 2) + s
   }
 }
