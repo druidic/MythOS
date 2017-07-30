@@ -14,12 +14,6 @@ function OS() {
         ''
       ]
       .concat(apps.map(prefix('    ')))
-      .concat([
-        '',
-        'Help:',
-        '',
-        '    Press [Shift+?] for help.'
-      ])
     }
   }
 }

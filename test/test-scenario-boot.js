@@ -17,7 +17,5 @@ describe('booting up', function() {
       .start()
       .onScreen(expect, ['GroveOS'])
       .onScreen(expect, ['Applications:'])
-      .onScreen(expect, ['Help:'])
-      .onScreen(expect, ['Press [Shift+?] for help.'])
   })
 })
