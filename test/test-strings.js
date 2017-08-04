@@ -13,3 +13,25 @@ describe('center', function() {
     expect(center(8)('hello')).toBe(' hello')
   })
 })
+
+describe('wrap', function() {
+  it('wraps one string in another', function() {
+    expect(wrap('^')('_')).toBe('^_^')
+  })
+})
+
+describe('snug', function() {
+  it('pads a string with spaces on the right, then truncates to 64 chars', function() {
+    expect(snug('')).toBe(
+      '                                ' +
+      '                                '
+    )
+    expect(snug('').length).toBe(64)
+
+    expect(snug('foo')).toBe(
+      'foo                             ' +
+      '                                '
+    )
+    expect(snug('foo').length).toBe(64)
+  })
+})

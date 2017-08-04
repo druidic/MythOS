@@ -15,20 +15,27 @@ function toContainGrid() {
         pass: isPass(actual, expected)
       }
 
+      function format(lines) {
+        return lines
+          .map(wrap('"'))
+          .map(prefix('    '))
+          .join('\n')
+      }
+
       if (result.pass) {
         result.message =
           "Saw unexpected output.\n"
           + "  The output was:\n"
-          + actual.map(prefix('    ')).join('\n')
-          + "  The unexpected text was:\n"
-          + expected.map(prefix('    ')).join('\n')
+          + format(actual)
+          + " \n\n The unexpected text was:\n"
+          + format(expected)
       } else {
         result.message =
           "Did not see expected output.\n"
           + "  The output was:\n"
-          + actual.map(prefix('    ')).join('\n')
+          + format(actual)
           + "\n\n  The expected text was:\n"
-          + expected.map(prefix('    ')).join('\n')
+          + format(expected)
       }
 
       return result
@@ -44,13 +51,15 @@ function toContainGrid() {
     }
 
     for (var i = 0; i <= actual.length - expected.length; i++) {
-      var foundIndex = actual[i].indexOf(expected[0])
+      var actualLine = snug(actual[i])
+      var foundIndex = actualLine.indexOf(expected[0])
       if (foundIndex === -1) continue
 
       pass = true
 
       for (var k = 0; k < expected.length; k++) {
-        if (!containsAt(actual[i + k], expected[k], foundIndex)) {
+        actualLine = snug(actual[i + k])
+        if (!containsAt(actualLine, expected[k], foundIndex)) {
           pass = false
           break
         }
@@ -93,6 +102,18 @@ describe('expect(...).toContainGrid', function() {
   it('does not find a subgrid when it is not there', function() {
     expect(['abc','def','ghi']).not.toContainGrid(['t'])
     expect(['abc','def','ghi']).not.toContainGrid(['b','e','g'])
+  })
+
+  it('treats short lines as if padded with spaces', function() {
+    expect([
+      'a',
+      ' b',
+      '  c'])
+      .toContainGrid([
+      'a    ',
+      ' b   ',
+      '  c  '
+      ])
   })
 })
 
