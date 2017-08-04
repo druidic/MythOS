@@ -65,4 +65,18 @@ describe('The app launch screen', function() {
         '    app2     '
       ])
   })
+
+  it('launches an app when you press enter', function() {
+    var appCode = [
+      'app.render = function() {',
+      '  return "greetings"',
+      '}'
+    ].join('\n')
+    TestHarness(OS())
+      .writeFile('dir:apps', 'hello')
+      .writeFile('app:hello', appCode)
+      .start()
+      .input('\n')
+      .onScreen(expect, ['greetings'])
+  })
 })
