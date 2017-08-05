@@ -8,7 +8,7 @@ function TestHarness(app) {
     start: start,
     input: input,
     pressKey: pressKey,
-    // releaseKey: releaseKey,
+    releaseKey: releaseKey,
     wait: wait,
     getScreen: getScreen,
     writeFile: writeFile,
@@ -35,6 +35,13 @@ function TestHarness(app) {
     if (!started) start()
 
     callMain({type: 'keyDown', key: code})
+    return self
+  }
+
+  function releaseKey(code) {
+    if (!started) start()
+
+    callMain({type: 'keyUp', key: code})
     return self
   }
 
