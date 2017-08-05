@@ -107,7 +107,7 @@ function keyCode(c) {
       if (   c === CHARS_BY_CODE[code][0]
           || c === CHARS_BY_CODE[code][1]) {
 
-        return code
+        return parseInt(code)
       }
     }
   }
