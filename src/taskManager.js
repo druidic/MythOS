@@ -8,7 +8,7 @@ screen('taskManager', function(scrn) {
 
     return {
       screen: [
-        center(64)('GroveOS'),
+        center(64)('MythOS Task Manager'),
         '',
         'Applications:',
         ''
