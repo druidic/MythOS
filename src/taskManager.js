@@ -1,4 +1,6 @@
 screen('taskManager', function(scrn) {
+  var ENTER = 13
+
   scrn.init = function($) {
     $.my.cursor = 0
   }
@@ -34,12 +36,11 @@ screen('taskManager', function(scrn) {
             $.my.cursor = 0
           }
           break
-        case '\n':
-          goToScreen('runningApp', $, {
-            app: apps[$.my.cursor]
-          })
-          break
       }
+    }
+
+    if (event.type === 'keyUp' && event.key === ENTER) {
+      launchApp($, apps[$.my.cursor])
     }
   }
 

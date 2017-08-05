@@ -2,7 +2,7 @@ screen('runningApp', function(scrn) {
   var SHIFT = 16
 
   scrn.init = function($, params) {
-    $.my.appName = params.app
+    $.my.app = params.app
     $.my.shiftEvents = 0
     $.my.framesSinceLastShift = 0
   }
@@ -24,15 +24,18 @@ screen('runningApp', function(scrn) {
       }
     }
 
+    if ($.my.app.update) {
+      $.my.app.update(event, $.my.app.state)
+    }
+
     if ($.my.shiftEvents === 4) {
       goToScreen('taskManager', $)
     }
   }
 
   scrn.render = function($) {
-    var app = loadApp($.records, $.my.appName)
     return {
-      screen: [app.render()]
+      screen: [$.my.app.render($.my.app.state)]
     }
   }
 
