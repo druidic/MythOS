@@ -27,7 +27,7 @@ screen('runningApp', function(scrn) {
     $.my.app.update(event)
 
     if ($.my.shiftEvents === 4) {
-      goToScreen('taskManager', $)
+      goToScreen('home', $)
     }
   }
 

@@ -1,4 +1,4 @@
-screen('taskManager', function(scrn) {
+screen('home', function(scrn) {
   var ENTER = 13
 
   scrn.init = function($) {
@@ -10,7 +10,7 @@ screen('taskManager', function(scrn) {
 
     return {
       screen: [
-        center(64)('MythOS Task Manager'),
+        center(64)('Home Screen'),
         '',
         'Applications:',
         ''

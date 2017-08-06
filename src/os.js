@@ -4,7 +4,7 @@ function OS() {
     my: null
   }
 
-  goToScreen('taskManager', state)
+  goToScreen('home', state)
 
   return {
     main: main
