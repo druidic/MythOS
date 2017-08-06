@@ -25,7 +25,11 @@ screen('runningApp', function(scrn) {
     }
 
     if ($.my.app.update) {
-      $.my.app.update(event, $.my.app.state)
+      try {
+        $.my.app.update(event, $.my.app.state)
+      } catch (e) {
+        setErrorMessage($, e)
+      }
     }
 
     if ($.my.shiftEvents === 4) {
@@ -34,8 +38,19 @@ screen('runningApp', function(scrn) {
   }
 
   scrn.render = function($) {
+    if ($.my.error) {
+      return {screen: $.my.error}
+    }
+
+    var output
+    try {
+      output = [$.my.app.render($.my.app.state)]
+    } catch (e) {
+      setErrorMessage($, e)
+      return {screen: $.my.error}
+    }
     return {
-      screen: [$.my.app.render($.my.app.state)]
+      screen: output
     }
   }
 
@@ -49,5 +64,15 @@ screen('runningApp', function(scrn) {
 
   function isKeyEvent(event) {
     return event.key
+  }
+
+  function setErrorMessage($, error) {
+    $.my.error = [
+      'The app "' + $.my.app.name + '" has crashed.',
+      'The error was:',
+      '    ' + error,
+      '',
+      'Please double-tap [shift] to return to the home screen.'
+    ]
   }
 })
