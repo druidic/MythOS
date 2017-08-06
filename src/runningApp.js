@@ -24,13 +24,7 @@ screen('runningApp', function(scrn) {
       }
     }
 
-    if ($.my.app.update) {
-      try {
-        $.my.app.update(event, $.my.app.state)
-      } catch (e) {
-        setErrorMessage($, e)
-      }
-    }
+    $.my.app.update(event)
 
     if ($.my.shiftEvents === 4) {
       goToScreen('taskManager', $)
@@ -38,41 +32,10 @@ screen('runningApp', function(scrn) {
   }
 
   scrn.render = function($) {
-    if ($.my.error) {
-      return {screen: $.my.error}
-    }
-
-    var output
-    try {
-      output = [$.my.app.render($.my.app.state)]
-    } catch (e) {
-      setErrorMessage($, e)
-      return {screen: $.my.error}
-    }
-    return {
-      screen: output
-    }
-  }
-
-  function loadApp(records, name) {
-    var code = records.read('app:' + name)
-    var f = new Function('app', code)
-    var app = {}
-    f(app)
-    return app
+    return {screen: $.my.app.render()}
   }
 
   function isKeyEvent(event) {
     return event.key
-  }
-
-  function setErrorMessage($, error) {
-    $.my.error = [
-      'The app "' + $.my.app.name + '" has crashed.',
-      'The error was:',
-      '    ' + error,
-      '',
-      'Please double-tap [shift] to return to the home screen.'
-    ]
   }
 })

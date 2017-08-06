@@ -47,3 +47,29 @@ describe('When an app crashes in update()', function() {
       ])
   })
 })
+
+describe('When an app crashes in init()', function() {
+  it('displays an error screen', function() {
+    var code = [
+      'app.render = function() {',
+      '  return "okay"',
+      '}',
+      'app.init = function() {',
+      '  throw "boom"',
+      '}'
+    ].join('\n')
+
+    TestHarness(OS())
+      .writeFile('dir:apps', 'test')
+      .writeFile('app:test', code)
+      .start()
+      .input('\n')
+      .onScreen(expect, [
+        'The app "test" has crashed.',
+        'The error was:',
+        '    boom',
+        '',
+        'Please double-tap [shift] to return to the home screen.'
+      ])
+  })
+})
