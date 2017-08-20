@@ -12,7 +12,8 @@ function TestHarness(app) {
     wait: wait,
     getScreen: getScreen,
     writeFile: writeFile,
-    onScreen: onScreen
+    onScreen: onScreen,
+    and: and
   }
 
   function start() {
@@ -87,6 +88,11 @@ function TestHarness(app) {
 
   function onScreen(expect, lines) {
     expect(screen).toContainGrid(lines)
+    return self
+  }
+
+  function and(callback) {
+    callback(self)
     return self
   }
 }

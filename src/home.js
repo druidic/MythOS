@@ -3,6 +3,14 @@ screen('home', function(scrn) {
 
   scrn.init = function($) {
     $.my.cursor = 0
+    if (!$.apps) {
+      $.apps = AppList()
+    }
+
+    listInstalledApps($).forEach(function(appName) {
+      var code = $.records.read('app:' + appName)
+      $.apps.add(App(appName, code))
+    })
   }
 
   scrn.render = function($) {
@@ -15,19 +23,20 @@ screen('home', function(scrn) {
         'Applications:',
         ''
       ]
-      .concat(renderAppList(listInstalledApps($), cursor))
+      .concat(renderAppList($.apps, cursor))
     }
   }
 
   scrn.update = function(event, $) {
     var apps = listInstalledApps($)
+    var appCount = $.apps.count()
 
     if (event.type === 'keyDown') {
       switch (char(event.key)) {
         case 'j':
           $.my.cursor++
-          if ($.my.cursor >= apps.length) {
-            $.my.cursor = apps.length - 1
+          if ($.my.cursor >= appCount) {
+            $.my.cursor = appCount - 1
           }
           break
         case 'k':
@@ -40,21 +49,30 @@ screen('home', function(scrn) {
     }
 
     if (event.type === 'keyUp' && event.key === ENTER) {
-      launchApp($, apps[$.my.cursor])
+      // launchApp($, apps[$.my.cursor])
+      var app = $.apps.at($.my.cursor)
+      app.launch()
+      goToScreen('runningApp', $, {app: app})
     }
   }
 
   function renderAppList(apps, cursor) {
-    if (apps.length === 0) {
+    if (apps.count() === 0) {
       return '    There are no installed applications.'
     }
-    return apps.map(at(cursor,
-      prefix('  █ '),
-      prefix('    ')))
+    return apps
+      .map(getName)
+      .map(at(cursor,
+        prefix('  █ '),
+        prefix('    ')))
   }
 
   function listInstalledApps($) {
     var dir = $.records.read('dir:apps')
     return dir ? dir.split('\n') : []
+  }
+
+  function getName(app) {
+    return app.name
   }
 })

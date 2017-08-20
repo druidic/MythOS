@@ -1,31 +1,40 @@
-function App(name, eventHandlers) {
+function App(name, sourceCode) {
   var state = {}
   var running = false
-  var errorOutput
-
-  init(state)
+  var errorOutput = null
+  var executable = null
 
   return {
+    launch: launch,
     update: update,
     render: render,
-    isRunning: isRunning
+    isRunning: isRunning,
+    name: name
   }
 
-  function init() {
-    if (typeof eventHandlers.init === 'function') {
+  function launch() {
+    if (running) return
+
+    var exe = getExecutable()
+    state = {}
+
+    if (typeof exe.init === 'function') {
       try {
-        eventHandlers.init(state)
+        exe.init(state)
       } catch (e) {
         handleError(e)
       }
     }
+
     running = true
   }
 
   function update(event) {
-    if (typeof eventHandlers.update === 'function') {
+    var exe = getExecutable()
+
+    if (typeof exe.update === 'function') {
       try {
-        return eventHandlers.update(event, state)
+        return exe.update(event, state)
       } catch (e) {
         handleError(e)
       }
@@ -33,13 +42,15 @@ function App(name, eventHandlers) {
   }
 
   function render() {
+    var exe = getExecutable()
+
     if (errorOutput) {
       return errorOutput
     }
 
-    if (typeof eventHandlers.render === 'function') {
+    if (typeof exe.render === 'function') {
       try {
-        return [eventHandlers.render(state)]
+        return [exe.render(state)]
       } catch (e) {
         handleError(e)
         return errorOutput
@@ -60,5 +71,14 @@ function App(name, eventHandlers) {
       '',
       'Please double-tap [shift] to return to the home screen.'
     ]
+  }
+
+  function getExecutable() {
+    if (executable) return executable
+
+    var appDefinition = new Function('app', sourceCode)
+    executable = {}
+    appDefinition(executable)
+    return executable
   }
 }
