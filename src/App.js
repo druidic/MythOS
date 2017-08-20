@@ -8,6 +8,7 @@ function App(name, sourceCode) {
     launch: launch,
     update: update,
     render: render,
+    updateCode: updateCode,
     isRunning: isRunning,
     name: name
   }
@@ -56,6 +57,11 @@ function App(name, sourceCode) {
         return errorOutput
       }
     }
+  }
+
+  function updateCode(records) {
+    sourceCode = records.read('app:' + name)
+    executable = null
   }
 
   function isRunning() {

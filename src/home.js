@@ -45,6 +45,9 @@ screen('home', function(scrn) {
             $.my.cursor = 0
           }
           break
+        case 'u':
+          $.apps.at($.my.cursor).updateCode($.records)
+          break
       }
     }
 
